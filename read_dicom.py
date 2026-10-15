@@ -40,7 +40,7 @@ def read_dicom(path):
         return ct_values, pixel_spacing
 
     # For 3D array of Dicom Images
-    elif os.path.isfile(path) == True:
+    elif os.path.isdir(path) == True:
 
         # Create an array of each file path in directory
         for file_name in os.listdir(path):
@@ -51,8 +51,11 @@ def read_dicom(path):
         unsorted_dicom_image = []
 
         # Sort images in order of z position
-        for i in range(len(file_array)):
-            unsorted_dicom_image.append(dcmread(file_array[i]))
+        try:
+            for i in range(len(file_array)):
+                unsorted_dicom_image.append(dcmread(file_array[i]))
+        except InvalidDicomError:                                    #Ignore non-DICOM files in directory and keep iterating
+            print(f'{file_array[i]} is not a DICOM file')
 
         sorted_dicom_image = sorted(unsorted_dicom_image, key=get_z_position)
 
