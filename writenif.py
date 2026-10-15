@@ -4,8 +4,6 @@ import numpy as np
 
 
 def write_nifti(data, spacing, file_path):
-    data = np.asarray(data)
-    spacing = tuple(spacing)
     affine = np.eye(4)
     for i in range(len(spacing)):
         affine[i, i] = spacing[i]
