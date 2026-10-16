@@ -2,7 +2,7 @@ from pydicom import dcmread
 import os
 import numpy as np
 
-def get_z_position(dicom_image):
+def _get_z_position(dicom_image):
     """
     Returns the z-coordinate of the Image Position Patient DICOM attribute.
     """
@@ -57,7 +57,7 @@ def read_dicom(path):
         except InvalidDicomError:                                    #Ignore non-DICOM files in directory and keep iterating
             print(f'{file_array[i]} is not a DICOM file')
 
-        sorted_dicom_image = sorted(unsorted_dicom_image, key=get_z_position)
+        sorted_dicom_image = sorted(unsorted_dicom_image, key=_get_z_position)
 
         # Convert to HU
         for i in range(len(sorted_dicom_image)):
