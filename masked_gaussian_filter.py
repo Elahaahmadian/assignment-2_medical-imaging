@@ -27,8 +27,10 @@ def masked_gaussian_filter(image, mask, sigma):
     smoothed_image = gaussian_filter(mask * image, sigma)
     smoothed_mask = gaussian_filter(mask, sigma)
 
-    result = mask * (smoothed_image / smoothed_mask)
-    result = np.nan_to_num(result, nan=0.0, posinf=0.0, neginf=0.0)
+    with np.errstate(divide="ignore", invalid="ignore"):
+        result = mask * (smoothed_image / smoothed_mask)
+
+    result = np.nan_to_num(result,nan=0.0,posinf=0.0,neginf=0.0)
 
     return result
 
