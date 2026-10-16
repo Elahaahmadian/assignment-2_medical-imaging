@@ -13,13 +13,13 @@ def read_nifti(file_path):
 
     return nifti_image.get_fdata(), spacing
 
-def get_z_position(dicom_image):
+def _get_z_position(dicom_image):
     """
     Returns the z-coordinate of the Image Position Patient DICOM attribute.
     """
     return dicom_image.ImagePositionPatient[2]
 
-def get_spacing(dicom_list):
+def _get_spacing(dicom_list):
     n = len(dicom_list)
     dx, dy = dicom_list[0].PixelSpacing
 
@@ -81,7 +81,7 @@ def read_dicom(path):
         except InvalidDicomError:                                    #Ignore non-DICOM files in directory and keep iterating
             print(f'{file_array[i]} is not a DICOM file')
 
-        sorted_dicom_image = sorted(unsorted_dicom_image, key=get_z_position)
+        sorted_dicom_image = sorted(unsorted_dicom_image, key=_get_z_position)
 
         # Convert to HU
         for i in range(len(sorted_dicom_image)):
@@ -104,5 +104,5 @@ def read_dicom(path):
 
     else:
         dicom_image = dcmread(file_path)
-        spacing = get_spacing([dicom_image])
+        spacing = _get_spacing([dicom_image])
         return np.asarray(dicom_image.pixel_array), spacing
